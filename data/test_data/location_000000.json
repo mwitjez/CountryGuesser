@@ -1,0 +1,31 @@
+{
+    "coordinates": [
+        1.4235239028930664,
+        103.74949645996094
+    ],
+    "country_name": "Malaysia",
+    "country_code": "MY",
+    "regions": [
+        [
+            "Singapore_North West_SGP-4873",
+            "POINT (103.807352 1.399476)"
+        ],
+        [
+            "Singapore_South West_SGP-4872",
+            "POINT (103.731595 1.347105)"
+        ],
+        [
+            "Singapore_Central Singapore_SGP-4871",
+            "POINT (103.854538 1.346645)"
+        ],
+        [
+            "Singapore_North East_SGP-4874",
+            "POINT (103.926971 1.383236)"
+        ],
+        [
+            "Singapore_South East_SGP-4875",
+            "POINT (103.933061 1.34814)"
+        ]
+    ],
+    "is_in_region": "False"
+}
