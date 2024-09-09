@@ -4,7 +4,6 @@ import os
 import torchvision.transforms as transforms
 from PIL import Image
 from torch.utils.data import DataLoader, Dataset
-from torchvision import transforms
 
 
 class CustomImageDataset(Dataset):
@@ -43,7 +42,7 @@ class DataLoaders:
             transforms.ToTensor(),
         ])
         self._label_mapping_path = "../data/country_to_index.json"
-        self._base_path = "../data/trial_data" if trial_data else "data/full_data"
+        self._base_path = "../data/trial_data" if trial_data else "../data/full_data"
 
         self._train_dataloader = self._create_dataloader("train")
         self._test_dataloader = self._create_dataloader("test")
@@ -55,7 +54,7 @@ class DataLoaders:
             label_mapping_path=self._label_mapping_path,
             transform=self._transform,
         )
-        return DataLoader(dataset, batch_size=32, shuffle=True, num_workers=4)
+        return DataLoader(dataset, batch_size=64, shuffle=True, num_workers=4)
 
     def get_train_dataloader(self) -> DataLoader:
         return self._train_dataloader
