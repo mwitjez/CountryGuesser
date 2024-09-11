@@ -4,13 +4,14 @@ import os
 import torchvision.transforms as transforms
 from PIL import Image
 from torch.utils.data import DataLoader, Dataset
+from sklearn.model_selection import train_test_split
 
 
 class CustomImageDataset(Dataset):
-    def __init__(self, folder_path, label_mapping_path, transform=None):
+    def __init__(self, folder_path, image_filenames, label_mapping_path, transform=None):
         self.folder_path = folder_path
         self.transform = transform
-        self.image_filenames = [f for f in os.listdir(folder_path) if f.endswith((".jpg", ".png", ".jpeg"))]
+        self.image_filenames = image_filenames
         with open(label_mapping_path, "r") as f:
             self.label_mapping = json.load(f)
 
@@ -36,28 +37,30 @@ class CustomImageDataset(Dataset):
 
 
 class DataLoaders:
-    def __init__(self, trial_data: bool = True):
+    def __init__(self, trial_data: bool = True, test_size: float = 0.2):
         self._transform = transforms.Compose([
             transforms.Resize((224, 224)),
             transforms.ToTensor(),
         ])
-        self._label_mapping_path = "../data/country_to_index.json"
+        self._label_mapping_path = "../data/country_to_index_mapped.json"
         self._base_path = "../data/trial_data" if trial_data else "../data/full_data"
 
-        self._train_dataloader = self._create_dataloader("train")
-        self._test_dataloader = self._create_dataloader("test")
+        all_image_filenames = [f for f in os.listdir(f"{self._base_path}/") if f.endswith((".jpg", ".png", ".jpeg"))]
+        train_filenames, val_filenames = train_test_split(all_image_filenames, test_size=test_size)
+        self._train_dataloader = self._create_dataloader(train_filenames)
+        self._val_dataloader = self._create_dataloader(val_filenames)
 
-    def _create_dataloader(self, data_type: str) -> DataLoader:
-        path = f"{self._base_path}/{data_type}"
+    def _create_dataloader(self, image_filenames: list) -> DataLoader:
         dataset = CustomImageDataset(
-            folder_path=path,
+            folder_path=self._base_path,
+            image_filenames=image_filenames,
             label_mapping_path=self._label_mapping_path,
             transform=self._transform,
         )
-        return DataLoader(dataset, batch_size=64, shuffle=True, num_workers=4)
+        return DataLoader(dataset, batch_size=64, shuffle=True, num_workers=2)
 
     def get_train_dataloader(self) -> DataLoader:
         return self._train_dataloader
 
-    def get_test_dataloader(self) -> DataLoader:
-        return self._test_dataloader
+    def get_val_dataloader(self) -> DataLoader:
+        return self._val_dataloader
