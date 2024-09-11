@@ -42,8 +42,8 @@ class DataLoaders:
             transforms.Resize((224, 224)),
             transforms.ToTensor(),
         ])
-        self._label_mapping_path = "../data/country_to_index_mapped.json"
-        self._base_path = "../data/trial_data" if trial_data else "../data/full_data"
+        self._label_mapping_path = "data/country_to_index_mapped.json"
+        self._base_path = "data/trial_data" if trial_data else "data/full_data"
 
         all_image_filenames = [f for f in os.listdir(f"{self._base_path}/") if f.endswith((".jpg", ".png", ".jpeg"))]
         train_filenames, val_filenames = train_test_split(all_image_filenames, test_size=test_size)

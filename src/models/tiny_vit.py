@@ -16,7 +16,6 @@ import torch.utils.checkpoint as checkpoint
 import timm
 from timm.models.layers import DropPath as TimmDropPath,\
     to_2tuple, trunc_normal_
-from timm.models.registry import register_model
 try:
     # timm.__version__ >= "0.6"
     from timm.models._builder import build_model_with_cfg
@@ -637,7 +636,6 @@ def _create_tiny_vit(variant, pretrained=False, **kwargs):
             **kwargs)
 
 
-@register_model
 def tiny_vit_5m_224(pretrained=False, **kwargs):
     model_kwargs = dict(
         embed_dims=[64, 128, 160, 320],
@@ -650,7 +648,6 @@ def tiny_vit_5m_224(pretrained=False, **kwargs):
     return _create_tiny_vit('tiny_vit_5m_224', pretrained, **model_kwargs)
 
 
-@register_model
 def tiny_vit_11m_224(pretrained=False, **kwargs):
     model_kwargs = dict(
         embed_dims=[64, 128, 256, 448],
@@ -663,7 +660,6 @@ def tiny_vit_11m_224(pretrained=False, **kwargs):
     return _create_tiny_vit('tiny_vit_11m_224', pretrained, **model_kwargs)
 
 
-@register_model
 def tiny_vit_21m_224(pretrained=False, **kwargs):
     model_kwargs = dict(
         embed_dims=[96, 192, 384, 576],
@@ -676,7 +672,6 @@ def tiny_vit_21m_224(pretrained=False, **kwargs):
     return _create_tiny_vit('tiny_vit_21m_224', pretrained, **model_kwargs)
 
 
-@register_model
 def tiny_vit_21m_384(pretrained=False, **kwargs):
     model_kwargs = dict(
         img_size=384,
@@ -690,7 +685,6 @@ def tiny_vit_21m_384(pretrained=False, **kwargs):
     return _create_tiny_vit('tiny_vit_21m_384', pretrained, **model_kwargs)
 
 
-@register_model
 def tiny_vit_21m_512(pretrained=False, **kwargs):
     model_kwargs = dict(
         img_size=512,

@@ -15,7 +15,7 @@ class TinyVitLightning(L.LightningModule):
         self.f1_score = MulticlassF1Score(num_classes=num_classes)
 
         self.loss = nn.CrossEntropyLoss()
-        self.lr = 1e-3
+        self.lr = 2.5e-4
 
         self.save_hyperparameters()
 
@@ -51,6 +51,6 @@ class TinyVitLightning(L.LightningModule):
         self.log("val_f1", f1, on_step=False, on_epoch=True)
 
     def configure_optimizers(self):
-        optimizer = Adam(self.parameters(), lr=self.lr)
-        scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
+        optimizer = Adam(self.parameters(), lr=self.lr, weight_decay=1e-8)
+        scheduler = StepLR(optimizer, step_size=10, gamma=0.01)
         return [optimizer], [scheduler]
