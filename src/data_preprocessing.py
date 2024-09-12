@@ -32,7 +32,6 @@ class CustomImageDataset(Dataset):
 
 
 class GeoDataModule(L.LightningDataModule):
-
     def __init__(self, trial_data: bool = False, batch_size: int = 32) -> None:
         super().__init__()
         self.trial_data = trial_data
