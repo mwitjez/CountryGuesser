@@ -1,18 +1,21 @@
 import torch
+import json
 import torch.nn as nn
 import lightning as L
-from src.models.tiny_vit import tiny_vit_21m_224
+from models.tiny_vit import tiny_vit_21m_224
 from torch.optim import Adam
 from torch.optim.lr_scheduler import StepLR
 from torchmetrics.classification import MulticlassF1Score, Accuracy
 
 class TinyVitLightning(L.LightningModule):
-    def __init__(self, num_classes):
+    def __init__(self):
+        with open("src/config/model_config.json", "r") as f:
+            config = json.load(f)
         super().__init__()
-        self.pretrained_model = tiny_vit_21m_224(pretrained=True, num_classes=num_classes)
+        self.pretrained_model = tiny_vit_21m_224(pretrained=config["pretrained"], num_classes=config["num_classes"])
 
-        self.accuracy = Accuracy(task="multiclass", num_classes=num_classes)
-        self.f1_score = MulticlassF1Score(num_classes=num_classes)
+        self.accuracy = Accuracy(task="multiclass", num_classes=config["num_classes"])
+        self.f1_score = MulticlassF1Score(num_classes=config["num_classes"])
 
         self.loss = nn.CrossEntropyLoss()
         self.lr = 2.5e-4
