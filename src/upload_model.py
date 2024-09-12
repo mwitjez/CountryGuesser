@@ -1,10 +1,12 @@
 import os
 import shutil
+
+import lightning as L
 import torch
 from huggingface_hub import Repository
 
 
-def upload_model(model):
+def upload_model(model: L.LightningModule) -> None:
     model_save_path = "data/models/"
     repo = Repository(local_dir=model_save_path, clone_from="mwitjez/geoguessr_tiny_ViT")
 

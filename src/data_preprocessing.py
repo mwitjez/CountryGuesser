@@ -1,27 +1,27 @@
 import json
 import os
-import pandas as pd
-import lightning as L
+from typing import Tuple
 
+import lightning as L
+import pandas as pd
 import torchvision.transforms as transforms
 from PIL import Image
-from torch.utils.data import DataLoader, Dataset
 from sklearn.model_selection import train_test_split
-
+from torch.utils.data import DataLoader, Dataset
 
 
 class CustomImageDataset(Dataset):
-    def __init__(self, df):
+    def __init__(self, df: pd.DataFrame) -> None:
         self.df = df
         self.transform = transforms.Compose([
             transforms.Resize((224, 224)),
             transforms.ToTensor(),
         ])
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.df)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> Tuple[Image.Image, int]:
         row = self.df.iloc[idx]
         img_path = row["filename"]
         image = Image.open(img_path).convert("RGB")
@@ -32,24 +32,25 @@ class CustomImageDataset(Dataset):
 
 
 class GeoDataModule(L.LightningDataModule):
-    def __init__(self, trial_data: bool=False, batch_size: int = 32):
+
+    def __init__(self, trial_data: bool = False, batch_size: int = 32) -> None:
         super().__init__()
         self.trial_data = trial_data
         self.batch_size = batch_size
 
-    def setup(self, stage: str):
+    def setup(self, stage: str) -> None:
         df = self._create_unified_dataframe(self.trial_data)
         train_df, val_df = train_test_split(df, test_size=0.2, random_state=42)
         self.train_dataset = CustomImageDataset(train_df)
         self.val_dataset = CustomImageDataset(val_df)
 
-    def train_dataloader(self):
+    def train_dataloader(self) -> DataLoader:
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=4, persistent_workers=True)
 
-    def val_dataloader(self):
+    def val_dataloader(self) -> DataLoader:
         return DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=False, num_workers=4, persistent_workers=True)
 
-    def _create_unified_dataframe(self, trial_data: bool=False):
+    def _create_unified_dataframe(self, trial_data: bool = False) -> pd.DataFrame:
         base_path = "data/trial_data" if trial_data else "data/full_data"
         street_location_dataset_path = f"{base_path}/street-location-images/data"
         geolocation_dataset_path = f"{base_path}/compressed_dataset"
@@ -77,4 +78,3 @@ class GeoDataModule(L.LightningDataModule):
                     data.append([f"{geolocation_dataset_path}/{label_str}/{img_name}", label])
 
         return pd.DataFrame(data, columns=["filename", "label"])
-
