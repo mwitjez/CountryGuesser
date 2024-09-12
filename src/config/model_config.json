@@ -1,4 +1,6 @@
 {
     "num_classes": 75,
-    "pretrained": true
+    "pretrained": true,
+    "batch_size": 32,
+    "num_epochs": 10
 }

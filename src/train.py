@@ -1,3 +1,4 @@
+import json
 from lightning import Trainer
 from lightning.pytorch.callbacks.early_stopping import EarlyStopping
 from lightning.pytorch.loggers import WandbLogger
@@ -7,11 +8,14 @@ from models.tiny_vit_lightning import TinyVitLightning
 
 
 def train():
-    data_module = GeoDataModule(trial_data=True)
-    model = TinyVitLightning()
-    wandb_logger = WandbLogger()
+    with open("src/config/model_config.json", "r") as f:
+        config = json.load(f)
+
+    data_module = GeoDataModule(trial_data=True, batch_size=config["batch_size"])
+    model = TinyVitLightning(config)
+    wandb_logger = WandbLogger(project="geoguessr AI")
     trainer = Trainer(
-        max_epochs=10,
+        max_epochs=config["num_epochs"],
         callbacks=[EarlyStopping(monitor="val_loss", mode="min")],
         logger=wandb_logger
     )

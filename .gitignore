@@ -164,6 +164,7 @@ data/full_data
 data/full_data/
 .DS_Store
 notebooks/wandb
+wandb
 wandb/
 notebooks/lightning_logs
 notebooks/wandb
@@ -171,3 +172,5 @@ notebooks/wandb
 *.DS_Store
 */.DS_Store
 lightning_logs
+lightning_logs/
+lightning_logs/*

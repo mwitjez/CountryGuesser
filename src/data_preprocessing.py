@@ -44,10 +44,10 @@ class GeoDataModule(L.LightningDataModule):
         self.val_dataset = CustomImageDataset(val_df)
 
     def train_dataloader(self):
-        return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True)
+        return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=4, persistent_workers=True)
 
     def val_dataloader(self):
-        return DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=False)
+        return DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=False, num_workers=4, persistent_workers=True)
 
     def _create_unified_dataframe(self, trial_data: bool=False):
         base_path = "data/trial_data" if trial_data else "data/full_data"
