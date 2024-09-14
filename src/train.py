@@ -12,7 +12,7 @@ def train() -> L.LightningModule:
     with open("src/config/model_config.json", "r") as f:
         config = json.load(f)
 
-    data_module = GeoDataModule(trial_data=True, batch_size=config["batch_size"])
+    data_module = GeoDataModule(trial_data=config["trial_data"], batch_size=config["batch_size"])
     model = TinyVitLightning(config)
     wandb_logger = WandbLogger(project="geoguessr AI")
     trainer = Trainer(

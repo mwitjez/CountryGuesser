@@ -38,7 +38,7 @@ class GeoDataModule(L.LightningDataModule):
         self.batch_size = batch_size
 
     def setup(self, stage: str) -> None:
-        df = self._create_unified_dataframe(self.trial_data)
+        df = self._create_unified_dataframe()
         train_df, val_df = train_test_split(df, test_size=0.2, random_state=42)
         self.train_dataset = CustomImageDataset(train_df)
         self.val_dataset = CustomImageDataset(val_df)
@@ -49,8 +49,8 @@ class GeoDataModule(L.LightningDataModule):
     def val_dataloader(self) -> DataLoader:
         return DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=False, num_workers=4, persistent_workers=True)
 
-    def _create_unified_dataframe(self, trial_data: bool = False) -> pd.DataFrame:
-        base_path = "data/trial_data" if trial_data else "data/full_data"
+    def _create_unified_dataframe(self) -> pd.DataFrame:
+        base_path = "data/trial_data" if self.trial_data else "data/full_data"
         street_location_dataset_path = f"{base_path}/data"
         geolocation_dataset_path = f"{base_path}/compressed_dataset"
         label_mapping_path = f"{base_path}/country_to_index.json"
