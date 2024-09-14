@@ -1,5 +1,5 @@
 {
-    "num_classes": 75,
+    "num_classes": 137,
     "pretrained": true,
     "batch_size": 32,
     "num_epochs": 10

@@ -51,9 +51,9 @@ class GeoDataModule(L.LightningDataModule):
 
     def _create_unified_dataframe(self, trial_data: bool = False) -> pd.DataFrame:
         base_path = "data/trial_data" if trial_data else "data/full_data"
-        street_location_dataset_path = f"{base_path}/street-location-images/data"
+        street_location_dataset_path = f"{base_path}/data"
         geolocation_dataset_path = f"{base_path}/compressed_dataset"
-        label_mapping_path = f"{base_path}/street-location-images/country_to_index_mapped.json"
+        label_mapping_path = f"{base_path}/country_to_index_mapped.json"
 
         with open(label_mapping_path, "r") as f:
             label_mapping = json.load(f)
