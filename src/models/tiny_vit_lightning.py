@@ -7,13 +7,13 @@ from torch.optim import Adam
 from torch.optim.lr_scheduler import StepLR
 from torchmetrics.classification import Accuracy, MulticlassF1Score
 
-from models.tiny_vit import tiny_vit_21m_512
+from models.tiny_vit import tiny_vit_21m_224
 
 
 class TinyVitLightning(L.LightningModule):
     def __init__(self, config: dict):
         super().__init__()
-        self.pretrained_model = tiny_vit_21m_512(
+        self.pretrained_model = tiny_vit_21m_224(
             pretrained=config["pretrained"], num_classes=config["num_classes"]
         )
 

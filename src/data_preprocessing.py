@@ -14,7 +14,7 @@ class CustomImageDataset(Dataset):
     def __init__(self, df: pd.DataFrame) -> None:
         self.df = df
         self.transform = transforms.Compose([
-            transforms.Resize((512, 512)),
+            transforms.Resize((224, 224)),
             transforms.ToTensor(),
         ])
 
