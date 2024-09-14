@@ -9,7 +9,7 @@ from huggingface_hub import login
 
 def upload_model(model: L.LightningModule) -> None:
     load_dotenv()
-    login()
+    login(os.getenv("HUGGINGFACE_TOKEN"))
 
     model_save_path = "data/models/"
     repo = Repository(local_dir=model_save_path, clone_from="mwitjez/geoguessr_tiny_ViT")
