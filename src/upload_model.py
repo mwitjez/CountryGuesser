@@ -3,10 +3,12 @@ import shutil
 
 import lightning as L
 import torch
+from dotenv import load_dotenv
 from huggingface_hub import Repository
 from huggingface_hub import login
 
 def upload_model(model: L.LightningModule) -> None:
+    load_dotenv()
     login()
 
     model_save_path = "data/models/"
