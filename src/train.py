@@ -1,6 +1,7 @@
 import json
 
 import lightning as L
+import torch
 from data_preprocessing import GeoDataModule
 from lightning import Trainer
 from lightning.pytorch.callbacks.early_stopping import EarlyStopping
@@ -12,6 +13,7 @@ def train() -> L.LightningModule:
     with open("src/config/model_config.json", "r") as f:
         config = json.load(f)
 
+    torch.set_float32_matmul_precision("medium")
     data_module = GeoDataModule(trial_data=config["trial_data"], batch_size=config["batch_size"])
     model = TinyVitLightning(config)
     wandb_logger = WandbLogger(project="geoguessr AI")
