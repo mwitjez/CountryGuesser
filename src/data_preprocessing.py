@@ -32,21 +32,26 @@ class CustomImageDataset(Dataset):
 
 
 class GeoDataModule(L.LightningDataModule):
-    def __init__(self, trial_data: bool = False, batch_size: int = 32) -> None:
+    def __init__(self, config: dict) -> None:
         super().__init__()
-        self.trial_data = trial_data
-        self.batch_size = batch_size
+        self.trial_data = config["trial_data"]
+        self.batch_size = config["batch_size"]
 
     def setup(self, stage: str) -> None:
         df = self._create_unified_dataframe()
-        train_df, val_df = train_test_split(df, test_size=0.2, random_state=42)
+        train_df, val_test_df = train_test_split(df, test_size=0.2, random_state=42)
+        val_df, test_df = train_test_split(val_test_df, test_size=0.5, random_state=42)
         self.train_dataset = CustomImageDataset(train_df)
         self.val_dataset = CustomImageDataset(val_df)
+        self.test_dataset = CustomImageDataset(test_df)
 
     def train_dataloader(self) -> DataLoader:
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=4, persistent_workers=True)
 
     def val_dataloader(self) -> DataLoader:
+        return DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=False, num_workers=4, persistent_workers=True)
+
+    def test_dataloader(self) -> DataLoader:
         return DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=False, num_workers=4, persistent_workers=True)
 
     def _create_unified_dataframe(self) -> pd.DataFrame:

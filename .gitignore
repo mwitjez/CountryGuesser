@@ -174,3 +174,4 @@ notebooks/wandb
 lightning_logs
 lightning_logs/
 lightning_logs/*
+data/.DS_Store

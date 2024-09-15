@@ -21,7 +21,7 @@ class TinyVitLightning(L.LightningModule):
         self.f1_score = MulticlassF1Score(num_classes=config["num_classes"])
 
         self.loss = nn.CrossEntropyLoss()
-        self.lr = 2.5e-4
+        self.lr = 1e-4
 
         self.save_hyperparameters()
 
@@ -58,5 +58,5 @@ class TinyVitLightning(L.LightningModule):
 
     def configure_optimizers(self) -> Tuple[List[torch.optim.Optimizer], List[torch.optim.lr_scheduler._LRScheduler]]:
         optimizer = Adam(self.parameters(), lr=self.lr, weight_decay=1e-8)
-        scheduler = StepLR(optimizer, step_size=10, gamma=0.01)
-        return [optimizer], [scheduler]
+        scheduler = StepLR(optimizer, step_size=1, gamma=0.2)
+        return [optimizer], [scheduler] 
