@@ -14,7 +14,7 @@ class CustomImageDataset(Dataset):
     def __init__(self, df: pd.DataFrame) -> None:
         self.df = df
         self.transform = transforms.Compose([
-            transforms.Resize((224, 224)),
+            transforms.Resize((256, 256)),
             transforms.ToTensor(),
         ])
 
@@ -76,9 +76,10 @@ class GeoDataModule(L.LightningDataModule):
                 data.append([img_path, label])
 
         for label_str in os.listdir(geolocation_dataset_path):
-            for img_name in os.listdir(f"{geolocation_dataset_path}/{label_str}"):
-                label = label_mapping.get(label_str)
-                if label:
-                    data.append([f"{geolocation_dataset_path}/{label_str}/{img_name}", label])
+            if not label_str.startswith('.'):
+                for img_name in os.listdir(f"{geolocation_dataset_path}/{label_str}"):
+                    label = label_mapping.get(label_str)
+                    if label:
+                        data.append([f"{geolocation_dataset_path}/{label_str}/{img_name}", label])
 
         return pd.DataFrame(data, columns=["filename", "label"])
