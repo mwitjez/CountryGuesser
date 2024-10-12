@@ -9,26 +9,8 @@ from PIL import Image
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset
 
-
-class CustomImageDataset(Dataset):
-    def __init__(self, df: pd.DataFrame) -> None:
-        self.df = df
-        self.transform = transforms.Compose([
-            transforms.Resize((256, 256)),
-            transforms.ToTensor(),
-        ])
-
-    def __len__(self) -> int:
-        return len(self.df)
-
-    def __getitem__(self, idx: int) -> Tuple[Image.Image, int]:
-        row = self.df.iloc[idx]
-        img_path = row["filename"]
-        image = Image.open(img_path).convert("RGB")
-        if self.transform:
-            image = self.transform(image)
-        label = row["label"]
-        return image, label
+from src.data_preprocesing.large_dataset_preprocessing import LargeDatasetPreprocessor
+from src.data_preprocesing.image_dataset import CustomImageDataset
 
 
 class GeoDataModule(L.LightningDataModule):
@@ -36,14 +18,15 @@ class GeoDataModule(L.LightningDataModule):
         super().__init__()
         self.trial_data = config["trial_data"]
         self.batch_size = config["batch_size"]
+        self.image_size = (config["image_size"], config["image_size"])
 
     def setup(self, stage: str) -> None:
         df = self._create_unified_dataframe()
         train_df, val_test_df = train_test_split(df, test_size=0.2, random_state=42)
         val_df, test_df = train_test_split(val_test_df, test_size=0.5, random_state=42)
-        self.train_dataset = CustomImageDataset(train_df)
-        self.val_dataset = CustomImageDataset(val_df)
-        self.test_dataset = CustomImageDataset(test_df)
+        self.train_dataset = CustomImageDataset(train_df, self.image_size)
+        self.val_dataset = CustomImageDataset(val_df, self.image_size)
+        self.test_dataset = CustomImageDataset(test_df, self.image_size)
 
     def train_dataloader(self) -> DataLoader:
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=4, persistent_workers=True)
@@ -63,6 +46,25 @@ class GeoDataModule(L.LightningDataModule):
         with open(label_mapping_path, "r") as f:
             label_mapping = json.load(f)
 
+        street_location_dataset = self._get_street_location_dataset(street_location_dataset_path, label_mapping)
+        geolocation_dataset = self._get_geolocation_dataset(geolocation_dataset_path, label_mapping)
+        large_dataset_of_images = self._get_large_dataset_of_images(base_path)
+
+        data = street_location_dataset + geolocation_dataset + large_dataset_of_images
+
+        return pd.DataFrame(data, columns=["filename", "label"])
+
+    def _get_geolocation_dataset(self, geolocation_dataset_path, label_mapping):
+        data = []
+        for label_str in os.listdir(geolocation_dataset_path):
+            if not label_str.startswith('.'):
+                for img_name in os.listdir(f"{geolocation_dataset_path}/{label_str}"):
+                    label = label_mapping.get(label_str)
+                    if label:
+                        data.append([f"{geolocation_dataset_path}/{label_str}/{img_name}", label])
+        return data
+
+    def _get_street_location_dataset(self, street_location_dataset_path, label_mapping):
         data = []
         for img_name in os.listdir(street_location_dataset_path):
             if img_name.endswith((".jpg", ".png", ".jpeg")):
@@ -74,12 +76,9 @@ class GeoDataModule(L.LightningDataModule):
                     label_str = label_data["country_name"]
                     label = label_mapping[label_str]
                 data.append([img_path, label])
+        return data
 
-        for label_str in os.listdir(geolocation_dataset_path):
-            if not label_str.startswith('.'):
-                for img_name in os.listdir(f"{geolocation_dataset_path}/{label_str}"):
-                    label = label_mapping.get(label_str)
-                    if label:
-                        data.append([f"{geolocation_dataset_path}/{label_str}/{img_name}", label])
-
-        return pd.DataFrame(data, columns=["filename", "label"])
+    def _get_large_dataset_of_images(self, base_path):
+        preprocessor = LargeDatasetPreprocessor()
+        data = preprocessor.get_data(base_path)
+        return data

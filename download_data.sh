@@ -5,6 +5,7 @@ source .env
 datasets=(
     "killusions/street-location-images"
     "ubitquitin/geolocation-geoguessr-images-50k"
+    "habedi/large-dataset-of-geotagged-images"
 )
 
 download_dir="data/full_data"

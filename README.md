@@ -42,13 +42,21 @@ pip install -r requirements.txt
 ## 🚀 **Usage**
 ---
 
-1. **Download the necessary data**:
+1. **Set .env file based on .env.template:**
+ ```bash
+HUGGINGFACE_TOKEN=""
+KAGGLE_API_TOKEN=""
+KAGGLE_USERNAME=""
+ ```
+
+
+2. **Download the necessary data**:
 
 ```bash
 sh src/download_data.bash
 ```
 
-2. **Train the AI model and upload to HuggingFace**:
+3. **Train the AI model and upload to HuggingFace**:
 
 ```bash
 python src/main.py
