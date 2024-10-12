@@ -11,3 +11,5 @@ wandb>=0.12.10
 python-dotenv==1.0.1
 onnx==1.16.2
 kaggle==1.6.17
+msgpack==1.1.0
+reverse-geocoder==1.5.1

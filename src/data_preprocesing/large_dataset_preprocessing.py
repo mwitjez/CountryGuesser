@@ -66,7 +66,7 @@ class LargeDatasetPreprocessor:
         country_code_to_label = json.load(
             open(f"{base_path}/country_code_to_index.json", "r")
         )
-        df["label"] = [country_code_to_label[result["cc"]] for result in results]
+        df["label"] = [country_code_to_label.get(result["cc"], None) for result in results]
 
-        data = list(zip(df["id"], df["label"]))
+        data = [(row_id, label) for row_id, label in zip(df["id"], df["label"]) if label is not None]
         return data
