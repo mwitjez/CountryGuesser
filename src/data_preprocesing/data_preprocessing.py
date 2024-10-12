@@ -1,13 +1,10 @@
 import json
 import os
-from typing import Tuple
 
 import lightning as L
 import pandas as pd
-import torchvision.transforms as transforms
-from PIL import Image
 from sklearn.model_selection import train_test_split
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader
 
 from src.data_preprocesing.large_dataset_preprocessing import LargeDatasetPreprocessor
 from src.data_preprocesing.image_dataset import CustomImageDataset

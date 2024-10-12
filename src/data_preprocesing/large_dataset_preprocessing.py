@@ -57,7 +57,7 @@ class LargeDatasetPreprocessor:
             for fname in os.listdir(dataset_dir)
             if fname.endswith(".msg")
         ]
-        coords, image_id = self._images_read_save(shard_fnames, base_path)
+        coords, image_id = self._images_read_save(shard_fnames[:10], base_path)
 
         df = self._create_df(image_id, coords)
 
