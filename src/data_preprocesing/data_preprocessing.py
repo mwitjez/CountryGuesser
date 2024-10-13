@@ -21,11 +21,30 @@ class GeoDataModule(L.LightningDataModule):
         df = self._create_unified_dataframe()
         df.dropna()
 
-        train_df, val_test_df = train_test_split(df, test_size=0.2, random_state=42)
+        filtered_data = df.groupby('label').apply(self._filter_and_sample).reset_index(drop=True)
+
+        # Display the results
+        print("Original dataset size:", df.shape)
+        print(df['label'].value_counts())  # Check the distribution
+        print("Filtered dataset size:", filtered_data.shape)
+        print(filtered_data['label'].value_counts())  # Check the distribution
+
+        train_df, val_test_df = train_test_split(filtered_data, test_size=0.2, random_state=42)
         val_df, test_df = train_test_split(val_test_df, test_size=0.5, random_state=42)
         self.train_dataset = CustomImageDataset(train_df, self.image_size)
         self.val_dataset = CustomImageDataset(val_df, self.image_size)
         self.test_dataset = CustomImageDataset(test_df, self.image_size)
+
+    def _filter_and_sample(self, group):
+        min_samples = 50
+        max_samples = 1000
+        if len(group) < min_samples:
+            return pd.DataFrame()  # Return empty DataFrame if below min_samples
+        elif len(group) > max_samples:
+            return group.sample(max_samples, random_state=42)  # Sample max_samples
+        else:
+            return group
+
 
     def train_dataloader(self) -> DataLoader:
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=4, persistent_workers=True)
