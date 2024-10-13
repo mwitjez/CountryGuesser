@@ -19,6 +19,15 @@ class GeoDataModule(L.LightningDataModule):
 
     def setup(self, stage: str) -> None:
         df = self._create_unified_dataframe()
+        unique_labels = df['label'].unique()
+        print("Unique labels: ")
+        print(unique_labels)
+        print("Number of unique labels: ")
+        print(len(unique_labels))
+        print("Dataframe dtype: ")
+        print(df['label'].dtype)
+        print("Null values: ")
+        print(df['label'].isnull().sum())
         train_df, val_test_df = train_test_split(df, test_size=0.2, random_state=42)
         val_df, test_df = train_test_split(val_test_df, test_size=0.5, random_state=42)
         self.train_dataset = CustomImageDataset(train_df, self.image_size)

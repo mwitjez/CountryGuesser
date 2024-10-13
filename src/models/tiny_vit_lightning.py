@@ -31,11 +31,11 @@ class TinyVitLightning(L.LightningModule):
     def training_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> torch.Tensor:
         x, y = batch
         logits = self(x)
-        loss = self.loss(logits, y.long())
+        loss = self.loss(logits, y)
         preds = torch.argmax(logits, dim=1)
 
-        acc = self.accuracy(preds, y.long())
-        f1 = self.f1_score(preds, y.long())
+        acc = self.accuracy(preds, y)
+        f1 = self.f1_score(preds, y)
 
         self.log("train_loss", loss, on_step=False, on_epoch=True, prog_bar=True)
         self.log("train_accuracy", acc, on_step=False, on_epoch=True)
@@ -46,11 +46,11 @@ class TinyVitLightning(L.LightningModule):
     def validation_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
         x, y = batch
         logits = self(x)
-        loss = self.loss(logits, y.long())
+        loss = self.loss(logits, y)
         preds = torch.argmax(logits, dim=1)
 
-        acc = self.accuracy(preds, y.long())
-        f1 = self.f1_score(preds, y.long())
+        acc = self.accuracy(preds, y)
+        f1 = self.f1_score(preds, y)
 
         self.log("val_loss", loss, on_step=False, on_epoch=True, prog_bar=True)
         self.log("val_acc", acc, on_step=False, on_epoch=True)

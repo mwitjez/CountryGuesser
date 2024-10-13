@@ -11,8 +11,7 @@ class CustomImageDataset(Dataset):
         self.df = df
         self.transform = transforms.Compose([
             transforms.Resize(image_size),
-            transforms.ToTensor(),
-            transforms.Lambda(lambda x: x.float())
+            transforms.ToTensor()
         ])
 
     def __len__(self) -> int:
