@@ -19,6 +19,8 @@ class GeoDataModule(L.LightningDataModule):
 
     def setup(self, stage: str) -> None:
         df = self._create_unified_dataframe()
+        df.dropna()
+
         unique_labels = df['label'].unique()
         print("Unique labels: ")
         print(unique_labels)
@@ -76,7 +78,7 @@ class GeoDataModule(L.LightningDataModule):
                 for img_name in os.listdir(f"{geolocation_dataset_path}/{label_str}"):
                     label = label_mapping.get(label_str)
                     if label:
-                        data.append([f"{geolocation_dataset_path}/{label_str}/{img_name}", label])
+                        data.append([f"{geolocation_dataset_path}/{label_str}/{img_name}", int(label)])
         return data
 
     def _get_street_location_dataset(self, street_location_dataset_path, label_mapping):
@@ -90,7 +92,7 @@ class GeoDataModule(L.LightningDataModule):
                     label_data = json.load(f)
                     label_str = label_data["country_name"]
                     label = label_mapping[label_str]
-                data.append([img_path, label])
+                data.append([img_path, int(label)])
         return data
 
     def _get_large_dataset_of_images(self, base_path):

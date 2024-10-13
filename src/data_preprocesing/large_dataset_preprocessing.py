@@ -68,5 +68,5 @@ class LargeDatasetPreprocessor:
         )
         df["label"] = [country_code_to_label.get(result["cc"], None) for result in results]
 
-        data = [(row_id, label) for row_id, label in zip(df["id"], df["label"]) if label is not None]
+        data = [(row_id, int(label)) for row_id, label in zip(df["id"], df["label"]) if label is not None]
         return data

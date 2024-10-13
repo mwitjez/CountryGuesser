@@ -1,5 +1,3 @@
-import json
-
 import lightning as L
 import torch
 from data_preprocesing.data_preprocessing import GeoDataModule
@@ -11,10 +9,7 @@ from models.tiny_vit_lightning import TinyVitLightning
 from models.fast_vit_lightning import FastVitLightning
 
 
-def train() -> L.LightningModule:
-    with open("src/config/model_config.json", "r") as f:
-        config = json.load(f)
-
+def train(config: dict) -> L.LightningModule:
     torch.set_float32_matmul_precision("medium")
     data_module = GeoDataModule(config)
     model = TinyVitLightning(config)
