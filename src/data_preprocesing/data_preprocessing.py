@@ -21,29 +21,11 @@ class GeoDataModule(L.LightningDataModule):
         df = self._create_unified_dataframe()
         df.dropna()
 
-        unique_labels = df['label'].unique()
-        print("Unique labels: ")
-        print(unique_labels)
-        print("Number of unique labels: ")
-        print(len(unique_labels))
-        print("Dataframe dtype: ")
-        print(df['label'].dtype)
-        print("Null values: ")
-        print(df['label'].isnull().sum())
-
         train_df, val_test_df = train_test_split(df, test_size=0.2, random_state=42)
         val_df, test_df = train_test_split(val_test_df, test_size=0.5, random_state=42)
         self.train_dataset = CustomImageDataset(train_df, self.image_size)
         self.val_dataset = CustomImageDataset(val_df, self.image_size)
         self.test_dataset = CustomImageDataset(test_df, self.image_size)
-
-        train_sample = self.train_dataset[0]
-        val_sample = self.val_dataset[0]
-        test_sample = self.test_dataset[0]
-
-        print(f"Train sample - Image dtype: {train_sample[0].dtype}, Label dtype: {train_sample[1].dtype}")
-        print(f"Val sample - Image dtype: {val_sample[0].dtype}, Label dtype: {val_sample[1].dtype}")
-        print(f"Test sample - Image dtype: {test_sample[0].dtype}, Label dtype: {test_sample[1].dtype}")
 
     def train_dataloader(self) -> DataLoader:
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=4, persistent_workers=True)
