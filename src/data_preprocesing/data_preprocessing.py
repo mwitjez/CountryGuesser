@@ -40,7 +40,7 @@ class GeoDataModule(L.LightningDataModule):
         print("Filtered dataset size:", filtered_data.shape)
         print(filtered_data['label'].value_counts())  # Check the distribution
 
-        train_df, val_test_df = train_test_split(df, test_size=0.2, random_state=42)
+        train_df, val_test_df = train_test_split(filtered_data, test_size=0.2, random_state=42)
         val_df, test_df = train_test_split(val_test_df, test_size=0.5, random_state=42)
         self.train_dataset = CustomImageDataset(train_df, self.image_size)
         self.val_dataset = CustomImageDataset(val_df, self.image_size)
