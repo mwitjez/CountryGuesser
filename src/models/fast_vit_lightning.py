@@ -12,7 +12,7 @@ from timm.models import create_model
 class FastVitLightning(L.LightningModule):
     def __init__(self, config: dict):
         super().__init__()
-        self.pretrained_model = create_model("eva02_base_patch14_448.mim_in22k_ft_in22k_in1k", pretrained=True, num_classes=config["num_classes"])
+        self.pretrained_model = create_model("fastvit_ma36", pretrained=True, num_classes=config["num_classes"])
 
         self.accuracy = Accuracy(task="multiclass", num_classes=config["num_classes"])
         self.f1_score = MulticlassF1Score(num_classes=config["num_classes"])
