@@ -6,13 +6,13 @@ from lightning.pytorch.callbacks import LearningRateMonitor
 from lightning.pytorch.callbacks.early_stopping import EarlyStopping
 from lightning.pytorch.loggers import WandbLogger
 from models.tiny_vit_lightning import TinyVitLightning
-from models.fast_vit_lightning import FastVitLightning
+from models.eva02_ligtning import Eva02VitLightning
 
 
 def train(config: dict) -> L.LightningModule:
     torch.set_float32_matmul_precision("medium")
     data_module = GeoDataModule(config)
-    model = TinyVitLightning(config)
+    model = Eva02VitLightning(config)
     wandb_logger = WandbLogger(project="geoguessr AI")
     trainer = Trainer(
         max_epochs=config["num_epochs"],
