@@ -1,7 +1,7 @@
 {
     "num_classes": 138,
     "pretrained": true,
-    "batch_size": 128,
+    "batch_size": 64,
     "num_epochs": 10,
     "image_size": 448,
     "trial_data": true
