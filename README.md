@@ -83,7 +83,7 @@ The model is trained using the following datasets from Kaggle:
 
 ## 📄 **License**
 
-This project is licensed under the MIT License, permitting free use, modification, and distribution. The software is provided "as-is," without any warranty.
+This project is licensed under the MIT License, permitting free use, modification, and distribution. The software is provided "as-is," without any warranty. For details, see the [LICENSE](./LICENSE) file.
 
 ---
 ## 🙏 **Acknowledgments**  
