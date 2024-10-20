@@ -1,25 +1,20 @@
 
-# 🌍 **Geoguessr AI**  
----
-
-**Project Goal:**  
-Develop an AI model to play Geoguessr, a geography-based game where players guess their location on Google Street View.
+# 🌍 **Country Guesser**  
+A Vision Transformer (ViT)-based AI model for country classification from photos. The fine-tuned model achieves **85% accuracy** on the validation dataset.
 
 ---
 
-## 🗂️ **Project Structure**
----
+## 🗂️ **Project Structure**  
+The project is structured as follows:
 
-The project is organized into the following directories:
-
-- **`src`**: Contains source code, AI model, and data preprocessing scripts.
-- **`notebooks`**: Jupyter notebooks for testing and training the AI model.
-- **`data`**: Dataset for training the AI model.
+- **`src/`**: Core source code, AI model, and data preprocessing scripts.
+- **`notebooks/`**: Jupyter notebooks for model training and testing.
+- **`data/`**: Datasets used for model training and validation.
 
 ---
 
-## 💻 **Requirements**
----
+## 💻 **Requirements**  
+To run the project, ensure you have the following dependencies installed:
 
 - Python 3.8+
 - PyTorch 1.9+
@@ -28,63 +23,69 @@ The project is organized into the following directories:
 
 ---
 
-## ⚙️ **Installation**
----
+## ⚙️ **Installation**  
 
-Install the required dependencies by running the following command:
+1. **Install Dependencies**  
+   To install the required Python packages, run:
 
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
----
+   Alternatively, execute the following script for complete package installation:
 
-## 🚀 **Usage**
----
+   ```bash
+   bash install_packages.sh
+   ```
 
-1. **Set .env file based on .env.template:**
- ```bash
-HUGGINGFACE_TOKEN=""
-KAGGLE_API_TOKEN=""
-KAGGLE_USERNAME=""
- ```
+2. **Set Environment Variables**  
+   Copy the template `.env.template` to `.env`, then fill in the required credentials:
 
+   ```bash
+   HUGGINGFACE_TOKEN=""
+   KAGGLE_API_TOKEN=""
+   KAGGLE_USERNAME=""
+   ```
 
-2. **Download the necessary data**:
+3. **Download Datasets**  
+   Use the provided script to download the necessary data:
 
-```bash
-sh src/download_data.bash
-```
+   ```bash
+   bash download_data.bash
+   ```
 
-3. **Train the AI model and upload to HuggingFace**:
+4. **Train the Model**  
+   To train the model and upload it to Hugging Face, run:
 
-```bash
-python src/main.py
-```
-
----
-
-## 🧠 **Model Architecture**
----
-
-The AI model is based on the **Tiny ViT** architecture, a lightweight version of the Vision Transformer (ViT). Key components include:
-
-- **`tiny_vit_21m_224`**: A pre-trained Tiny ViT model with 21 million parameters and an input size of 224x224.
-- **`TinyVitLightning`**: A custom LightningModule that wraps the Tiny ViT model with additional components, such as a classification head and a loss function.
+   ```bash
+   python src/main.py
+   ```
 
 ---
 
-## 📊 **Data**
+## 🧠 **Model Architecture**  
+
+The AI model utilizes the **Tiny ViT** architecture, designed for efficiency and accuracy. Key components include:
+
+- **`tiny_vit_21m_224`**: A lightweight Vision Transformer pre-trained with 21 million parameters, optimized for 224x224 image inputs.
+- **`TinyVitLightning`**: A custom PyTorch Lightning module that integrates the Tiny ViT model with additional components like a classification head and a loss function.
+
 ---
 
-The model is trained using two Kaggle datasets:
+## 📊 **Datasets**  
+The model is trained using the following datasets from Kaggle:
 
-- [killusions/street-location-images](https://www.kaggle.com/datasets/killusions/street-location-images)
-- [ubitquitin/geolocation-geoguessr-images-50k](https://www.kaggle.com/datasets/ubitquitin/geolocation-geoguessr-images-50k)
+- [Street Location Images](https://www.kaggle.com/datasets/killusions/street-location-images)
+- [Geolocation GeoGuessr Images 50k](https://www.kaggle.com/datasets/ubitquitin/geolocation-geoguessr-images-50k)
+- [Streetview Photospheres](https://www.kaggle.com/datasets/nikitricky/streetview-photospheres/data)
 
 ---
 
-## 🙏 **Acknowledgments**
----
+## 📄 **License**
 
-This project was inspired by the **Geoguessr** game and the **Tiny ViT** model. Special thanks to the creators of these amazing projects.
+This project is licensed under the MIT License, permitting free use, modification, and distribution. The software is provided "as-is," without any warranty.
+
+---
+## 🙏 **Acknowledgments**  
+This project draws inspiration from the popular game **GeoGuessr** and the advanced **Tiny ViT** architecture. Special thanks to the authors of these works for their valuable contributions to the community.
+
