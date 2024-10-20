@@ -88,4 +88,5 @@ This project is licensed under the MIT License, permitting free use, modificatio
 ---
 ## 🙏 **Acknowledgments**  
 This project draws inspiration from the popular game **GeoGuessr** and the advanced **Tiny ViT** architecture. Special thanks to the authors of these works for their valuable contributions to the community.
-
+ - [TinyVit](https://github.com/wkcn/TinyViT)
+ - [GeoGuessr](https://www.geoguessr.com)
